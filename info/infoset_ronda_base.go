@@ -75,10 +75,6 @@ type InfosetRondaBase struct {
 
 	// las acciones que YO puedo tomar
 	Chi []int
-
-	// Used by other "extended" structure
-	Nuestros_pts int
-	Opp_pts      int
 }
 
 func (info *InfosetRondaBase) setMuestra(p *pdt.Partida) {
@@ -384,12 +380,6 @@ func (info *InfosetRondaBase) setRonda(
 	info.ManoActual = estadoRonda
 }
 
-func (info *InfosetRondaBase) setPuntos(*pdt.Partida, *pdt.Manojo) {
-	// constantes; es decir que no aportan "entropía" al hash del infoset
-	info.Nuestros_pts = 0
-	info.Opp_pts = 0
-}
-
 func (info *InfosetRondaBase) HashBytes(h hash.Hash) []byte {
 	h.Reset()
 	hsep := []byte(sep)
@@ -439,13 +429,7 @@ func (info *InfosetRondaBase) HashBytes(h hash.Hash) []byte {
 	// 8
 	bs, _ = json.Marshal(info.Chi)
 	h.Write(bs)
-	h.Write(hsep)
-
-	// puntos
-	h.Write([]byte(strconv.Itoa(info.Nuestros_pts)))
-	h.Write(hsep)
-	h.Write([]byte(strconv.Itoa(info.Opp_pts)))
-	// h.Write(hsep) // <- last separator is not really necessary
+	// h.Write(hsep) // <- not necessary
 
 	return h.Sum(nil)
 }
@@ -489,7 +473,6 @@ func infosetRondaBaseFactory(
 		info.setChi(p, m, chi_i, a)
 		info.setResultadoManos(p, m)
 		info.setRonda(p, m, a)
-		info.setPuntos(p, m)
 		return info
 	}
 

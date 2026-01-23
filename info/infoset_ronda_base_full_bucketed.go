@@ -10,6 +10,9 @@ import (
 
 type InfosetRondaBaseFullBucketed struct {
 	InfosetRondaBase
+	// Used by other "extended" structure
+	Nuestros_pts int
+	Opp_pts      int
 }
 
 func (info *InfosetRondaBaseFullBucketed) setPuntos(p *pdt.Partida, m *pdt.Manojo) {
@@ -50,6 +53,7 @@ func infosetRondaBaseFullBucketedFactory(
 			InfosetRondaBase{
 				Vision: m.Jugador.ID,
 			},
+			0, 0,
 		}
 		chi_i := pdt.GetA(p, m)
 		info.setMuestra(p)
