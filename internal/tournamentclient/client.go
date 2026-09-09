@@ -56,8 +56,10 @@ func Handle(
 	start := time.Now()
 
 	if config.Active {
-		// Start a challenge and wait for the single "OK" response
-		tournament.StartNewChallenge(conn, scanner, config.N)
+		// Start a challenge and wait for the single "OK" response.
+		// This trainer/checkpoint format (cfr.ITrainer) is 2-player-only, so
+		// num_players is hardcoded rather than exposed as a config field.
+		tournament.StartNewChallenge(conn, scanner, config.N, 2)
 	}
 
 	// Main Message Processing Loop
@@ -129,8 +131,8 @@ func Handle(
 			if config.Loop {
 				if config.Active {
 					// Check time limit if needed
-					// Start a new challenge
-					tournament.StartNewChallenge(conn, scanner, config.N)
+					// Start a new challenge (2-player-only, see above)
+					tournament.StartNewChallenge(conn, scanner, config.N, 2)
 				}
 			} else {
 				return
